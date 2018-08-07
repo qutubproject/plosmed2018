@@ -11,6 +11,8 @@
 		qui do "${directory}/ado/`adoFile'"
 		}
 
+	net install grc1leg
+
 * Set Options
 
 	global graph_opts ///
@@ -34,10 +36,14 @@
 
 	global pct `" 0 "0%" .25 "25%" .5 "50%" .75 "75%" 1 "100%" "'
 	global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
-	global bar lc(white) lw(thin) la(center) // <- remove la(center) for Stata < 15
+	global bar lc(white) lw(thin) la(center) fi(100) // <- remove la(center) for Stata < 15
 
+* Generate all the results
 
-* Clean for release
+	qui do "${directory}/dofiles/results.do"
+	qui do "${directory}/dofiles/appendix.do"
+
+/* Clean for release
 
 	cd "$directory/dofiles/"
 
@@ -54,7 +60,5 @@
 		using ///
 			"results.do appendix.do" ///
 		, compact
-
-
 
 * Have a lovely day!

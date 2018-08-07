@@ -1,8 +1,8 @@
 * Appendix materials
 
-* Overtreatment
+* S1 Fig
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 	gen check = 1 // Incorrect assumed
 	replace check = 2 if correct == 0 & med > 0
@@ -17,31 +17,16 @@
 		bar(1, fc(navy) fi(100) lc(black) lw(thin)) bar(2, fc(maroon) fi(100) lc(black) lw(thin)) bar(3, fc(gold) fi(100) lc(black) lw(thin)) bar(4, fc(dkgreen) fi(100) lc(black) lw(thin) )  ///
 		$graph_opts1 legend(order(4 "Correct Treatment Only" 2 "Other Medication Only" 3 "Correct + Other Medication"  1 "Not Correct, No Medication") symxsize(small) symysize(small) c(2) pos(6))
 
-	graph export "$directory/outputs/BaselinePaper/images/A_case_overtreatment.png" , replace
+	graph export "${directory}/appendix/S1_Fig.png" , replace
 
+* S2 Fig
 
-* Informal - AYUSH
-
-	use "$directory/constructed/analysis_baseline.dta" , clear
-
-	keep if type_formal == 0
-
-	chartable ///
-		correct treat_cxr re_3 treat_refer med_any med_l_any_2 med_l_any_3  med_k_any_9  ///
-		if cp_5_det < 3 & city == 2 ///
-		[pweight = weight_city] ///
-		, rhs(2.cp_5_det i.case ) case0(Non-AYUSH) case1(AYUSH) or command(logit) xsize(8)
-
-		graph export "$directory/outputs/BaselinePaper/images/A_informal_ayush.png" , replace
-
-* Followups
-
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 
 	gen check = 1 // Incorrect assumed
 	replace check = 2 if correct == 0 & med > 0
-	replace check = 3 if correct == 1 // overtreatment
+	replace check = 3 if correct == 1
 	replace check = 4 if check == 3 & ((med==0 & case !=3) | (med==1&case==3))
 
 	label def check 4 " Correct Treatment Only" 2 "Other Medication Only" 3 "Correct + Other Medication"  1 "Not Correct, No Medication"
@@ -51,37 +36,35 @@
 	local opts lw(thin) lc(white) la(center) fi(100)
 
 	weightab ///
-		t_12 t_12?  ///
+		t_12 t_12a t_12b t_12c t_12d t_12e  ///
 		if city == 2 ///
 		[pweight = weight_city] ///
 		, $graph_opts barlab title("Patna") over(check) graph  xlab(${pct}) legend(pos(6) ring(1) c(2) symxsize(small) symysize(small) ///
 			order(1 "Correct Treatment Only" 3 "Other Medication Only" 2 "Correct + Other Medication"  4 "Not Correct, No Medication"))  ///
 		barlook(1 fc(dkgreen) `opts' 2 fc(gold) `opts' 3 fc(maroon) `opts'  4 fc(navy) `opts')
 
-		graph save "$directory/outputs/BaselinePaper/images/A_followup_1.gph" , replace
+		graph save "${directory}/appendix/S2_Fig_1.gph" , replace
 
 	weightab ///
-		t_12 t_12?  ///
+		t_12 t_12a t_12b t_12c t_12d t_12e  ///
 		if city == 3 ///
 		[pweight = weight_city] ///
 		, $graph_opts barlab title("Mumbai") over(check) graph legend(off) xlab(${pct}) ///
 		barlook(1 fc(dkgreen) `opts' 2 fc(gold) `opts' 3 fc(maroon) `opts'  4 fc(navy) `opts' )
 
-		graph save "$directory/outputs/BaselinePaper/images/A_followup_2.gph" , replace
+		graph save "${directory}/appendix/S2_Fig_2.gph" , replace
 
 		grc1leg ///
-			"$directory/outputs/BaselinePaper/images/A_followup_1.gph" ///
-			"$directory/outputs/BaselinePaper/images/A_followup_2.gph" ///
+			"${directory}/appendix/S2_Fig_1.gph" ///
+			"${directory}/appendix/S2_Fig_2.gph" ///
 			, $comb_opts xsize(8) r(1)
 
-		graph export "$directory/outputs/BaselinePaper/images/A_followup.png" , replace width(1000)
+		graph export "${directory}/appendix/S2_Fig.png" , replace width(1000)
 
-
-* Figure 5: ANOVA
-
+* S3 Fig
 
 	set matsize 5000
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 	cap mat drop theResults
 
@@ -151,12 +134,11 @@
 			legend(pos(5) ring(0) c(1) symxsize(small) symysize(small)  ///
 			order(6 "Variance Explained By:" 1 "City Setting" 2 "Case Scenario" 3 "MBBS Degree" 4 "All SP Characteristics" 5 "Full Interaction Model"  ))
 
-		graph export "$directory/outputs/BaselinePaper/images/A_ANOVA.png" , replace width(1000)
+		graph export "${directory}/appendix/S3_Fig.png" , replace width(1000)
 
+* S4 Fig
 
-* Consistency
-
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 	bys providerid case: egen maxvisit = max(visit)
 		keep if maxvisit == 2
@@ -187,30 +169,32 @@
 
 		betterbar cons*  ///
 			, xsize(6)  se n over(type_formal) $graph_opts xlab($pct) legend(r(1) symxsize(small) symysize(small)) ///
-			legend(c(1)) barlook(1 fc(maroon) lw(thin) lc(white) fi(100) 2 fc(navy) lw(thin) lc(white) fi(100) )
+			legend(c(1)) barlook(1 fc(maroon) ${bar} fi(100) 2 fc(navy) ${bar} )
 
-		graph export "$directory/outputs/BaselinePaper/images/A_consistency.png" , replace
+		graph export "${directory}/appendix/S4_Fig.png" , replace
 
-* Distributions of checklist by city and qualification
+* S5 Fig
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
-	egen check1 = rownonmiss(sp?_h_*)
-	egen check2 = rowtotal(sp?_h_*)
+	local checklist ///
+	sp1_h_1 sp1_h_2 sp1_h_3 sp1_h_4 sp1_h_5 sp1_h_6 sp1_h_7 sp1_h_8 sp1_h_9 sp1_h_10 sp1_h_11 sp1_h_12 ///
+		sp1_h_13 sp1_h_14 sp1_h_15 sp1_h_16 sp1_h_17 sp1_h_18 sp1_h_19 sp1_h_20 sp1_h_21 ///
+	sp2_h_1 sp2_h_2 sp2_h_3 sp2_h_4 sp2_h_5 sp2_h_6 sp2_h_7 sp2_h_8 sp2_h_9 sp2_h_10 sp2_h_11 sp2_h_12 ///
+		sp2_h_13 sp2_h_14 sp2_h_15 sp2_h_16 sp2_h_17 sp2_h_18 sp2_h_19 sp2_h_20 sp2_h_21 sp2_h_22 sp2_h_23 sp2_h_24 sp2_h_25 sp2_h_26 sp2_h_27 sp2_h_28 ///
+	sp3_h_1 sp3_h_2 sp3_h_3 sp3_h_4 sp3_h_5 sp3_h_6 sp3_h_7 sp3_h_8 sp3_h_9 sp3_h_10 sp3_h_11 sp3_h_12 ///
+		sp3_h_13 sp3_h_14 sp3_h_15 sp3_h_16 sp3_h_17 sp3_h_18 sp3_h_19 sp3_h_20 sp3_h_21 sp3_h_22 sp3_h_23 ///
+	sp4_h_1 sp4_h_2 sp4_h_3 sp4_h_4 sp4_h_5 sp4_h_6 sp4_h_7 sp4_h_8 sp4_h_9 sp4_h_10 sp4_h_11 sp4_h_12 ///
+		sp4_h_13 sp4_h_14 sp4_h_15 sp4_h_16 sp4_h_17 sp4_h_18 sp4_h_19 sp4_h_20 sp4_h_21 sp4_h_22 sp4_h_23 ///
+		sp4_h_24 sp4_h_25 sp4_h_26 sp4_h_27 sp4_h_28 sp4_h_29 sp4_h_30 sp4_h_31
+
+	egen check1 = rownonmiss(`checklist')
+	egen check2 = rowtotal(`checklist')
 	gen fehat = check2/check1
 
 	egen sp_city_id = group(city sp_id)
 	egen sp_city_mbbs = group(city type_formal case) , label
 	egen fac = group(facilitycode providerid)
-
-	/*
-	xtset fac
-	xtreg correct  i.city i.case i.type_formal i.sp_city_id i.sp_city_mbbs , fe
-		predict fehat , u
-		replace fehat = fehat + _b[_cons]
-		replace fehat = . if fehat > 1
-		replace fehat = . if fehat < 0
-	*/
 
 	label def formal 0 "Non-MBBS" 1 "MBBS+" , modify
 		label val type_formal formal
@@ -220,43 +204,29 @@
 	keep if case == 1
 	duplicates drop fac, force
 	local theWeight "[aweight=weight_city]"
-		tw ///
-			(kdensity fehat if typetemp == 1 `theWeight', lw(thick) fi(100)) ///
-			(kdensity fehat if typetemp == 2 `theWeight', lw(thick) lc(dkgreen)  fi(100)) ///
-			(kdensity fehat if typetemp == 3 `theWeight', lw(thick) lc(maroon)  fi(100)) ///
-			(kdensity fehat if typetemp == 4 `theWeight', lw(thick) fi(100)) ///
-			, $graph_opts xlab(${pct}) ylab(none) xtit("Checklist Completion in Case 1 {&rarr}") ///
-				legend(pos(12) r(1) order(1 "Patna Non-MBBS" 3 "Mumbai Non-MBBS"  2 "Patna MBBS" 4 "Mumbai MBBS")) xsize(7)
 
-			graph export "$directory/outputs/BaselinePaper/images/A_distributions.png" , replace width(1000)
+	tw ///
+		(kdensity fehat if typetemp == 1 `theWeight', lw(thick) fi(100)) ///
+		(kdensity fehat if typetemp == 2 `theWeight', lw(thick) lc(dkgreen)  fi(100)) ///
+		(kdensity fehat if typetemp == 3 `theWeight', lw(thick) lc(maroon)  fi(100)) ///
+		(kdensity fehat if typetemp == 4 `theWeight', lw(thick) fi(100)) ///
+		, $graph_opts xlab(${pct}) ytit("") ylab(none) xtit("Checklist Completion in Case 1 {&rarr}") ///
+			legend(pos(12) r(1) order(1 "Patna Non-MBBS" 3 "Mumbai Non-MBBS"  2 "Patna MBBS" 4 "Mumbai MBBS")) xsize(7)
 
-/* Followups
+		graph export "${directory}/appendix/S5_Fig.png" , replace width(1000)
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+* S6 Fig
 
-	label def case 1 "Case 1" 2 "Case 2" 3 "Case 3" 4 "Case 4" , modify
+	use "${directory}/data/analysis.dta" , clear
 
-	weightab ///
-		t_12 t_12?  ///
-		if city == 2 ///
+	keep if type_formal == 0
+
+	chartable ///
+		correct treat_cxr re_3 treat_refer med_any med_l_any_2 med_l_any_3  med_k_any_9  ///
+		if cp_5_det < 3 & city == 2 ///
 		[pweight = weight_city] ///
-		, $graph_opts barlab barlook(1 lw(thin) lc(white) fi(100)) title("Patna") over(case) graph legend(off) xlab(${pct})
+		, rhs(2.cp_5_det i.case ) case0(Non-AYUSH) case1(AYUSH) or command(logit) xsize(8)
 
-		graph save "$directory/outputs/BaselinePaper/images/A_followup_1.gph" , replace
-
-	weightab ///
-		t_12 t_12?  ///
-		if city == 3 ///
-		[pweight = weight_city] ///
-		, $graph_opts barlab barlook(1 lw(thin) lc(white) fi(100)) title("Mumbai") over(case) graph legend(pos(3) ring(0) c(1) symxsize(small) symysize(small)) xlab(${pct})
-
-		graph save "$directory/outputs/BaselinePaper/images/A_followup_2.gph" , replace
-
-		graph combine ///
-			"$directory/outputs/BaselinePaper/images/A_followup_1.gph" ///
-			"$directory/outputs/BaselinePaper/images/A_followup_2.gph" ///
-			, $comb_opts xsize(6) r(1)
-
-		graph export "$directory/outputs/BaselinePaper/images/A_followup.png" , replace width(1000)
+		graph export "${directory}/appendix/S6_Fig.png" , replace
 
 * Have a lovely day!
