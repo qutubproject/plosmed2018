@@ -1,0 +1,35 @@
+
+Variable      Obs Unique      Mean       Min       Max  Label
+------------------------------------------------------------------------------------------------
+case          101      1         4         4         4  Case
+checklist     101     12  .6212871         0         1  Essential Checklist %
+city          101      1         3         3         3  City ID
+cp_5          101      2   .970297         0         1  MBBS Provider
+cp_5_det       99      3  3.959596         2         4  Provider Qualification
+facilitycode  101     77         .         .         .  Qutub ID
+id            101     77  1237.446      1187      1283  Facility ID
+p_1            99      2  .8383838         0         1  Labs Price Known
+p_2           101      2  .8316832         0         1  Medicine Price Known
+providerid    101    101         .         .         .  Provider ID
+re_3          101      2  .3366337         0         1  Sputum AFB
+re_4          101      2  .3663366         0         1  Xpert MTB/RIF
+sp4_spur_1    101      2  .4950495         0         1  SP brought a sputum report
+sp_id         101      3  42.26733        41        44  SP ID
+t_12           99      2   .979798         0         1  Ask to Return
+visit         101      1         1         1         1  Visit
+type          101      1         4         4         4  Sample Type
+med_k_any_1   101      2   .019802         0         1  Unlabelled Tablets/Syrup
+med_k_any_9   101      2   .019802         0         1  Steroids
+med_k_any_16  101      2  .3069307         0         1  Cough Syrups
+med_l_any_1   101      2  .0990099         0         1  Anti-TB Treatment
+med_l_any_2   101      2  .0990099         0         1  Fluoroquinolone
+med_l_any_3   101      2  .3762376         0         1  Other Antibiotic
+med           101      8  2.594059         0         7  Polypharmacy
+med_any       101      2  .7920792         0         1  Any Medicine
+correct       101      2  .3861386         0         1  Correct Management
+treat_cxr     101      2   .960396         0         1  Chest X-Ray
+treat_refer   101      2   .009901         0         1  Referred Case
+weight         51      1         1         1         1  City-Sample Weight
+type_formal    51      1         1         1         1  MBBS Provider
+weight_city    51      1  .0004161  .0004161  .0004161  Within-City-Case Weight
+------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-* Final V1 baseline figures
+* Final paper figures
 
 **********
 * Tables *
@@ -12,7 +12,7 @@
 
 * Figure 1. Outcomes by City & Case
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 	label def case 1 "Case 1" 2 "Case 2" 3 "Case 3" 4 "Case 4" , modify
 
@@ -25,7 +25,7 @@
 		[pweight = weight_city] ///
 		, $graph_opts barlab barlook(1 `opts' fi(100)) title("Patna") over(case) graph legend(off) xlab(${pct})
 
-		graph save "$directory/outputs/BaselinePaper/images/Fig_1_1.gph" , replace
+		graph save ${directory}/outputs/Fig_1_1.gph" , replace
 
 	weightab ///
 		correct treat_cxr re_3 re_4 treat_refer t_12 ///
@@ -34,20 +34,19 @@
 		[pweight = weight_city] ///
 		, $graph_opts barlab barlook(1 `opts'  fi(100)) title("Mumbai") over(case) graph legend(pos(5) ring(0) c(1) symxsize(small) symysize(small)) xlab(${pct})
 
-		graph save "$directory/outputs/BaselinePaper/images/Fig_1_2.gph" , replace
+		graph save ${directory}/outputs/Fig_1_2.gph" , replace
 
 		graph combine ///
-			"$directory/outputs/BaselinePaper/images/Fig_1_1.gph" ///
-			"$directory/outputs/BaselinePaper/images/Fig_1_2.gph" ///
+			${directory}/outputs/Fig_1_1.gph" ///
+			${directory}/outputs/Fig_1_2.gph" ///
 			, $comb_opts xsize(7) r(1)
 
-		graph export "$directory/outputs/BaselinePaper/images/Fig_1.png" , replace width(1000)
-		graph export "$directory/outputs/BaselinePaper/images/Fig_1.tif" , replace width(1000)
+		graph export ${directory}/outputs/Fig_1.tif" , replace width(2000)
 
 
 * Figure 2:  Case 1 Venn Diagram
 
-	use "$directory/constructed/analysis_baseline.dta" ///
+	use "${directory}/data/analysis.dta" ///
 		if correct == 0 & case == 1 ///
 		, clear
 
@@ -58,14 +57,14 @@
 
 * Figure 3. Differences by city and qualification
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 		chartable ///
 			correct treat_cxr re_3 treat_refer med_any med_l_any_1 med_l_any_2 med_l_any_3  med_k_any_9  ///
 			[pweight = weight_city] ///
 			, $graph_opts rhs(type_formal 3.city i.case ) case0(Non-MBBS) case1(MBBS+) or command(logit) title("A. Differences by MBBS Qualification")
 
-			graph save "$directory/outputs/BaselinePaper/images/Fig_3_1.gph" , replace
+			graph save ${directory}/outputs/Fig_3_1.gph" , replace
 
 		chartable ///
 			correct treat_cxr re_3 re_4 treat_refer med_any med_l_any_1 med_l_any_2 med_l_any_3  med_k_any_9  ///
@@ -73,7 +72,7 @@
 			[pweight = weight_city] ///
 			, $graph_opts rhs(3.city i.case ) case0(Patna Non-MBBS) case1(Mumbai Non-MBBS) or command(logit) title("B. Non-MBBS Differences by City")
 
-			graph save "$directory/outputs/BaselinePaper/images/Fig_3_2.gph" , replace
+			graph save ${directory}/outputs/Fig_3_2.gph" , replace
 
 		chartable ///
 			correct treat_cxr re_3 re_4 treat_refer med_any med_l_any_1 med_l_any_2 med_l_any_3  med_k_any_9  ///
@@ -81,20 +80,19 @@
 			[pweight = weight_city] ///
 			, $graph_opts rhs(3.city i.case ) case0(Patna MBBS+) case1(Mumbai MBBS+) or command(logit) title("C. MBBS Differences by City")
 
-			graph save "$directory/outputs/BaselinePaper/images/Fig_3_3.gph" , replace
+			graph save ${directory}/outputs/Fig_3_3.gph" , replace
 
 		graph combine ///
-			"$directory/outputs/BaselinePaper/images/Fig_3_1.gph" ///
-			"$directory/outputs/BaselinePaper/images/Fig_3_2.gph" ///
-			"$directory/outputs/BaselinePaper/images/Fig_3_3.gph" ///
+			${directory}/outputs/Fig_3_1.gph" ///
+			${directory}/outputs/Fig_3_2.gph" ///
+			${directory}/outputs/Fig_3_3.gph" ///
 			, $comb_opts xsize(5) c(1) ysize(6) altshrink
 
-			graph export "$directory/outputs/BaselinePaper/images/Fig_3.png" , replace width(1000)
-			graph export "$directory/outputs/BaselinePaper/images/Fig_3.tif" , replace width(1000)
+			graph export ${directory}/outputs/Fig_3.tif" , replace width(2000)
 
 * Figure 4. Case 3v1 ; Case 4v4
 
-	use "$directory/constructed/analysis_baseline.dta" , clear
+	use "${directory}/data/analysis.dta" , clear
 
 		keep if (case == 3 | case == 1)
 
@@ -109,9 +107,9 @@
 			correct treat_cxr re_3 re_4 treat_refer med_any med_l_any_1 med_l_any_2 med_l_any_3  med_k_any_9  ///
 			[pweight = weight_city] , $graph_opts title("A. Case 1 vs Case 3 in all providers receiving both cases")  rhs(3.case i.city i.type_formal) case0(Case 1 (N=407)) case1(Case 3 (N=352)) or command(logit)
 
-		graph save "$directory/outputs/BaselinePaper/images/Fig_4_1.gph" , replace
+		graph save ${directory}/outputs/Fig_4_1.gph" , replace
 
-	use "$directory/constructed/analysis_baseline_sp4.dta" , clear
+	use "${directory}/data/analysis_sp4.dta" , clear
 
 		label def sp4_spur_1 0 "Ordinary Case 4" 1 "Case 4 w/Sputum Report"
 			label val sp4_spur_1 sp4_spur_1
@@ -120,14 +118,14 @@
 			correct treat_cxr re_3 re_4 treat_refer med_any med_l_any_1 med_l_any_2 med_l_any_3  med_k_any_9  ///
 			, $graph_opts title("B. SP4 with and without sputum report in Mumbai MBBS+") rhs(sp4_spur_1) case0(Ordinary (N=51)) case1(Report (N=50)) or command(logit)
 
-		graph save "$directory/outputs/BaselinePaper/images/Fig_4_2.gph" , replace
+		graph save ${directory}/outputs/Fig_4_2.gph" , replace
 
 		graph combine ///
-			"$directory/outputs/BaselinePaper/images/Fig_4_1.gph" ///
-			"$directory/outputs/BaselinePaper/images/Fig_4_2.gph" ///
+			${directory}/outputs/Fig_4_1.gph" ///
+			${directory}/outputs/Fig_4_2.gph" ///
 			, $comb_opts xsize(7) c(1)
 
-		graph export "$directory/outputs/BaselinePaper/images/Fig_4.tif" , replace width(1000)
+		graph export ${directory}/outputs/Fig_4.tif" , replace width(2000)
 
 
 * Have a lovely day!
