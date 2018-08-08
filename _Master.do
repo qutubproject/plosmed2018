@@ -11,7 +11,8 @@
 		qui do "${directory}/ado/`adoFile'"
 		}
 
-	net install grc1leg
+	net from http://www.stata.com/users/vwiggins
+		net install grc1leg
 
 * Set Options
 
