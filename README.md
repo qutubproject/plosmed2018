@@ -1,3 +1,3 @@
 # Replication materials for:
 
-## Ada Kwan, Benjamin Daniels, Vaibhav Saria, Srinath Satyanarayana, Ramnath Subbaraman, Andrew McDowell, Sofi Bergkvist, Ranendra Das, Veena Das, Jishnu Das, and Madhukar Pai. "Variations in the quality of tuberculosis care in urban india: A cross-sectional, standardized patient study in two cities." PLOS Medicine, Forthcoming.
+## Kwan A, Daniels B, Saria V, Satyanarayana S, Subbaraman R, McDowell A, et al. (2018) Variations in the quality of tuberculosis care in urban India: A cross-sectional, standardized patient study in two cities. PLoS Med 15(9): e1002653.
